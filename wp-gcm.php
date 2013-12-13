@@ -12,7 +12,7 @@
  * @copyright 2013 SudoSaints
  *
  * @wordpress-plugin
- * Plugin Name:       WordPress push notificaions for Android via GCM
+ * Plugin Name:       Android Push Notifications (GCM)
  * Plugin URI:        http://varun1505.com/wpgcm
  * Description:       WordPress push notificaions for Android via GCM
  * Version:           1.0.0
