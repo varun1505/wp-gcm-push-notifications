@@ -65,3 +65,4 @@ if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
  */
  
 require_once( plugin_dir_path( __FILE__ ) . 'includes/class-response.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'includes/class-push-message.php' );

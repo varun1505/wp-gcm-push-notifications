@@ -149,7 +149,7 @@ class WP_GCM {
 			$response = new Response();
 			switch($action) {
 				case 'register': 
-						//Add user into the database
+						//Add device into the database
 						$data = array('gcm_id' => $wp->query_vars['gcm_id']);
 						$wpdb->insert($wpdb->prefix.'gcm_push', $data);
 						$id = $wpdb->insert_id;
@@ -157,7 +157,7 @@ class WP_GCM {
 						$response->setData(array(
 								'id' => $id, 
 								'gcm_id' => $wp->query_vars['gcm_id'],
-								'message' => 'User registered successfully.'
+								'message' => 'Device registered successfully.'
 							));
 					break;
 				case 'unregister':
@@ -166,7 +166,7 @@ class WP_GCM {
 					$response->setSuccess(true);
 					$response->setData(array(
 							'gcm_id' => $wp->query_vars['gcm_id'],
-							'message' => 'User with GCM ID "' . $wp->query_vars['gcm_id'] . '" unregistered successfully.'
+							'message' => 'Device with GCM ID "' . $wp->query_vars['gcm_id'] . '" unregistered successfully.'
 					));
 					break;
 				case 'invalid':

@@ -58,6 +58,9 @@ class WP_GCM_Admin {
 		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_slug . '.php' );
 		add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
 		
+		// Add an action to get everytime a post is published
+		add_action ( 'publish_post', array($this, 'push_notifications' ));
+		
 		
 	}
 
@@ -113,5 +116,10 @@ class WP_GCM_Admin {
 
 	}
 
-
+	public function push_notifications($post_ID){
+		$notif = new PushMessage();
+		$message = array('message' => 'A new post it published', 'post_id' => $post_ID);
+		$notif->setMessage($message);
+		$notif->send();
+	}
 }
