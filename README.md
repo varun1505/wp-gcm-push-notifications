@@ -16,7 +16,7 @@
 	<li>Obtain the Device ID for the device.</li>
 	<li>
 		Send device id as follows: <br/>
-		<b>http://yourwebsite.com/gcm/register/<your-device-id> </b>
+		<b>http://yourwebsite.com/gcm/register/&lt;your-device-id&gt; </b>
 	</li>
 	<li>Now your device is registered.</li>
 </ol>
