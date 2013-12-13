@@ -23,11 +23,11 @@
 
 <h2>How to un-register a device?</h2>
 <p> To un-register a device, send the device-id as follows: <br/>
-<b>http://yourwebsite.com/gcm/unregister/<your-device-id> </b>
+<b>http://yourwebsite.com/gcm/unregister/&lt;your-device-id&lt; </b>
 
 <h2>What else is coming to this plugin?</h2>
 <ol>
-	<li>Customizing the message that is sent to the device.</li
+	<li>Customizing the message that is sent to the device.</li>
 	<li>Selecting post types from custom post types.</li>
 	<li>Options for enabling push-notifications for more user-actions like new user added, comments, etc.</li>
 </ol>

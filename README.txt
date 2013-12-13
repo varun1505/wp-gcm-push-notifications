@@ -33,7 +33,7 @@ Install it like any other wordpress plugin.
 You'll have to request the API to register the device as below
 1. Obtain the Device ID for the device.
 1. Send device id as follows: 
-		*http://yourwebsite.com/gcm/register/&lt;your-device-id&gt;*
+		*http://yourwebsite.com/gcm/register/<your-device-id>*
 1. Now your device is registered.
 
 = How to un-register a device? =
