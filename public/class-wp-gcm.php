@@ -95,30 +95,16 @@ class WP_GCM {
 	 *                                       activated on an individual blog.
 	 */
 	public static function activate( $network_wide ) {
-
-		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
-
-			if ( $network_wide  ) {
-
-				// Get all blog ids
-				$blog_ids = self::get_blog_ids();
-
-				foreach ( $blog_ids as $blog_id ) {
-
-					switch_to_blog( $blog_id );
-					self::single_activate();
-				}
-
-				restore_current_blog();
-
-			} else {
-				self::single_activate();
-			}
-
-		} else {
-			self::single_activate();
-		}
-
+		global $wpdb;
+		
+		$sql = '
+		  CREATE TABLE '.$wpdb->prefix.'gcm_push (
+			id int(11) NOT NULL auto_increment,
+			gcm_id varchar(255) NOT NULL,
+			PRIMARY KEY  (id)
+		  )';
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta($sql);
 	}
 
 	/**
@@ -132,26 +118,7 @@ class WP_GCM {
 	 *                                       deactivated on an individual blog.
 	 */
 	public static function deactivate( $network_wide ) {
-		self::single_deactivate();
-		
-	}
-
-	/**
-	 * Fired for each blog when the plugin is activated.
-	 *
-	 * @since    1.0.0
-	 */
-	private static function single_activate() {
-		// @TODO: Create Table with WP_Query
-	}
-
-	/**
-	 * Fired for each blog when the plugin is deactivated.
-	 *
-	 * @since    1.0.0
-	 */
-	private static function single_deactivate() {
-		// @TODO: Define deactivation functionality here
+		//TODO: delete tables
 	}
 
 	/**
@@ -168,24 +135,42 @@ class WP_GCM {
 	
 	function wp_gcm_query_vars($vars) {
 		$new_vars = array (
-				'gcm'
+				'gcm','action','gcm_id'
 		);
 		$vars = $new_vars + $vars;
 		return $vars;
 	}
 	
 	function wp_gcm_parse_request($wp) {
-		// only process requests with "mypluginname=param1"
-		if (array_key_exists ( 'gcm', $wp->query_vars ) && $wp->query_vars ['gcm'] == 'param1') {
-			wp_gcm_custom_function ( $wp );
+		
+		if (array_key_exists ( 'action', $wp->query_vars ) ){
+			$action = $wp->query_vars['action'];
+			$response = new Response();
+			switch($action) {
+				case 'register': 
+						
+					break;
+				case 'unregister':
+						
+					break;
+				case 'invalid':
+				default: 	
+						$response->setSuccess(false);
+						$response->setError(array('error'=>'Invalid Action'));
+						$response->setData(array());
+						$response->respond();
+					break;
+			}
+			die();
 		}
+		
 	}
 	
 	function wp_gcm_rewrite_rules($wp_rewrite) {
 		$new_rules = array (
-				'gcm/param1' => 'index.php?gcm=param1'
+				"gcm/([^/]+)" => "index.php?action=invalid",
+				"gcm/([^/]+)/([^/]+)" => "index.php?action=".$wp_rewrite->preg_index(1)."&gcm_id=".$wp_rewrite->preg_index(2)
 		);
 		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
 	}
-
 }
