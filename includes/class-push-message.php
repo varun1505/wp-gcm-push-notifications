@@ -42,14 +42,25 @@ class PushMessage {
 	}
 	
 	private function get_device_ids(){
-		//TODO: Get the list of device ID's from Db
+		global $wpdb;
+		$response = array();
+		
+		$devices = $wpdb->get_results(
+				" SELECT * FROM ".$wpdb->prefix."gcm_push"
+		);
+		
+		foreach ( $devices as $device )
+		{
+			$response[] =  $device->gcm_id;
+		}
+		return $response;
 	}
 	
 	private function get_api_key(){
-		//TODO: get the API key from WP Settings
+		return get_option('gcm_apikey','');
 	}
 	
-	private function send(){
+	public function send(){
 		$fields = array(
 				'registration_ids'  => $this->deviceIds,
 				'data'              => $this->message
@@ -69,8 +80,6 @@ class PushMessage {
 		curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
 		
 		$result = curl_exec($ch);
-		echo $result;
-		die();
 	}
 	
 }

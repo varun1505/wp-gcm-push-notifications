@@ -58,9 +58,10 @@ class WP_GCM_Admin {
 		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_slug . '.php' );
 		add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
 		
-		// Add an action to get everytime a post is published
+		// Add an action to execute everytime a post is published
 		add_action ( 'publish_post', array($this, 'push_notifications' ));
 		
+		add_action('admin_init',array($this, 'gcm_register_settings'));
 		
 	}
 
@@ -117,9 +118,18 @@ class WP_GCM_Admin {
 	}
 
 	public function push_notifications($post_ID){
-		$notif = new PushMessage();
-		$message = array('message' => 'A new post it published', 'post_id' => $post_ID);
-		$notif->setMessage($message);
-		$notif->send();
+		if( ( $_POST['post_status'] == 'publish' ) && ( $_POST['original_post_status'] != 'publish' ) ) {
+			$post = get_post($post_ID,ARRAY_A);
+			
+			$notif = new PushMessage();
+			$message = array('message' => 'A new article is published.', 'post_id' => $post_ID);
+			$notif->setMessage($message);
+			$notif->send();
+		}
+	}
+	
+	
+	function gcm_register_settings(){
+		register_setting( 'gcm_settings', 'gcm_apikey');
 	}
 }

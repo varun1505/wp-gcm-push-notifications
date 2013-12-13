@@ -12,6 +12,12 @@
  * @copyright 2013 SudoSaints
  */
 ?>
+<?php if(isset($_POST['submit'])){ 
+	$apiKey = $_POST['api-key'];
+	
+	update_option('gcm_apikey', trim($apiKey));
+}?>
+
 <style>
 .txt-area {
 	width: 500px;
@@ -23,50 +29,24 @@
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 	<hr/>
 	<h3>GCM API Details</h3>
-	<form action="">
+	<form action="<?php echo admin_url('options-general.php?page=wp-gcm');?>" method="post">
 		<table class="form-table">
 			<tbody>
 				<tr>
 					<th><label for="email">API Key <span class="description">(required)</span></label></th>
-					<td><textarea name="api-key" id="api-key" class="txt-area" rows="5" cols="30"></textarea></td>
+					<td><textarea name="api-key" id="api-key" class="txt-area" rows="5" cols="30"><?php echo get_option('gcm_apikey','');?></textarea></td>
 				</tr>
 			
-				<tr>
+				<!-- <tr>
 					<th><label for="email">API Secret <span class="description">(required)</span></label></th>
 					<td><textarea name="api-secret" id="api-secret" class="txt-area" rows="5" cols="30"></textarea></td>
-				</tr>
+				</tr> -->
 				
 				<tr>
 					<th></th>
-					<td><input type="submit" class="button-primary" value="Save" /></td>
+					<td><input type="submit" class="button-primary" name="submit" value="Save" /></td>
 				</tr>
 			</tbody>
 		</table>
-	</form>
-	<!-- <h3>Registered users</h3>
-	<table class="widefat">
-		<thead>
-			<tr>
-				<th>S.No.</th>
-				<th>GCM ID</th>
-				<th>User Email</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th>1</th>
-				<th>asdfasfwer234234sadfq3rqf3sd</th>
-				<th>varun@sudosaints.com</th>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<th>S.No.</th>
-				<th>GCM ID</th>
-				<th>User Email</th>
-			</tr>
-		</tfoot>
-		
-	</table> -->
-	
+	</form>	
 </div>
