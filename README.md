@@ -27,6 +27,7 @@
 
 <h2>What else is coming to this plugin?</h2>
 <ol>
+	<li>Customizing the message that is sent to the device.</li
 	<li>Selecting post types from custom post types.</li>
-	<li>Customizing the message that is sent to the device.</li>
+	<li>Options for enabling push-notifications for more user-actions like new user added, comments, etc.</li>
 </ol>
