@@ -142,34 +142,49 @@ class WP_GCM {
 	}
 	
 	function wp_gcm_parse_request($wp) {
+		global $wpdb;
 		
 		if (array_key_exists ( 'action', $wp->query_vars ) ){
 			$action = $wp->query_vars['action'];
 			$response = new Response();
 			switch($action) {
 				case 'register': 
-						
+						//Add user into the database
+						$data = array('gcm_id' => $wp->query_vars['gcm_id']);
+						$wpdb->insert($wpdb->prefix.'gcm_push', $data);
+						$id = $wpdb->insert_id;
+						$response->setSuccess(true);
+						$response->setData(array(
+								'id' => $id, 
+								'gcm_id' => $wp->query_vars['gcm_id'],
+								'message' => 'User registered successfully.'
+							));
 					break;
 				case 'unregister':
-						
+					$data = array('gcm_id' => $wp->query_vars['gcm_id']);
+					$wpdb->delete($wpdb->prefix.'gcm_push', $data);
+					$response->setSuccess(true);
+					$response->setData(array(
+							'gcm_id' => $wp->query_vars['gcm_id'],
+							'message' => 'User with GCM ID "' . $wp->query_vars['gcm_id'] . '" unregistered successfully.'
+					));
 					break;
 				case 'invalid':
 				default: 	
 						$response->setSuccess(false);
 						$response->setError(array('error'=>'Invalid Action'));
 						$response->setData(array());
-						$response->respond();
 					break;
 			}
+			$response->respond();
 			die();
 		}
-		
 	}
 	
 	function wp_gcm_rewrite_rules($wp_rewrite) {
 		$new_rules = array (
-				"gcm/([^/]+)" => "index.php?action=invalid",
-				"gcm/([^/]+)/([^/]+)" => "index.php?action=".$wp_rewrite->preg_index(1)."&gcm_id=".$wp_rewrite->preg_index(2)
+				"gcm/([^/]+)/([^/]+)" => "index.php?action=".$wp_rewrite->preg_index(1)."&gcm_id=".$wp_rewrite->preg_index(2),
+				"gcm/([^/]+)" => "index.php?action=invalid"
 		);
 		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
 	}
